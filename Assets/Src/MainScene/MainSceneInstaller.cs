@@ -2,7 +2,9 @@ using Suburb.Screens;
 using Suburb.Utils;
 using TestTask.Clicker;
 using TestTask.Navigation;
+using TestTask.RestClientQueue;
 using TestTask.Transition;
+using TestTask.Weather;
 using UnityEngine;
 using Zenject;
 
@@ -18,6 +20,8 @@ namespace TestTask.MainScence
         {
             Container.Bind<InjectCreator>().AsSingle();
             Container.Bind<ClickerService>().AsSingle();
+            Container.Bind<RestClientService>().AsSingle();
+            Container.Bind<WeatherService>().AsSingle();
             
             Container.Bind<ScreensFactory>()
                 .AsSingle()
