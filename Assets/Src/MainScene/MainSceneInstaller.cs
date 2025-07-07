@@ -1,9 +1,11 @@
 using Suburb.Screens;
 using Suburb.Utils;
 using TestTask.Clicker;
+using TestTask.Dogs;
 using TestTask.Navigation;
 using TestTask.RestClientQueue;
 using TestTask.Transition;
+using TestTask.UI;
 using TestTask.Weather;
 using UnityEngine;
 using Zenject;
@@ -15,6 +17,9 @@ namespace TestTask.MainScence
         [SerializeField] private string screensRoot;
         [SerializeField] private NavigationLayout navigationLayoutPrefab;
         [SerializeField] private TransitionLayout transitionLayoutPrefab;
+        [SerializeField] private DogListItem dogListItemPrefab;
+
+        private static string DOG_LIST_ITEM_GROUP = "DOG_LIST_ITEM_GROUP";
         
         public override void InstallBindings()
         {
@@ -22,6 +27,7 @@ namespace TestTask.MainScence
             Container.Bind<ClickerService>().AsSingle();
             Container.Bind<RestClientService>().AsSingle();
             Container.Bind<WeatherService>().AsSingle();
+            Container.Bind<DogsService>().AsSingle();
             
             Container.Bind<ScreensFactory>()
                 .AsSingle()
@@ -49,6 +55,12 @@ namespace TestTask.MainScence
             Container.BindInterfacesAndSelfTo<MainSceneStartup>()
                 .AsSingle()
                 .NonLazy();
+            
+            Container.BindMemoryPool<DogListItem, DogListItem.Pool>()
+                .WithInitialSize(0)
+                .WithMaxSize(10)
+                .FromComponentInNewPrefab(dogListItemPrefab)
+                .UnderTransformGroup(DOG_LIST_ITEM_GROUP);
         }
     }
 }

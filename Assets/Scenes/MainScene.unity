@@ -203,6 +203,7 @@ MonoBehaviour:
   screensRoot: Screens
   navigationLayoutPrefab: {fileID: 7595048769490911728, guid: 9165d28d39eb24e6c842a83adec9259f, type: 3}
   transitionLayoutPrefab: {fileID: 2527197828248947730, guid: 9a5e710cad1dc44e2a73deec9cdfe228, type: 3}
+  dogListItemPrefab: {fileID: 6672069703612459134, guid: dfac94e39e0a245c3b215c0c640180cc, type: 3}
 --- !u!1 &35449023
 GameObject:
   m_ObjectHideFlags: 0

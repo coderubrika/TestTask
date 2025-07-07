@@ -1,0 +1,26 @@
+using TestTask.Dogs;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+using Zenject;
+
+namespace TestTask.UI
+{
+    public class DogListItem : MonoBehaviour
+    {
+        [SerializeField] private TMP_Text idx;
+        [SerializeField] private TMP_Text dogName;
+        [SerializeField] private Button openDogInfoButton;
+
+        public Button OpenDogInfoButton => openDogInfoButton;
+        
+        public class Pool : MonoMemoryPool<BreedData, int, DogListItem>
+        {
+            protected override void Reinitialize(BreedData data, int index, DogListItem item)
+            {
+                item.idx.text = index.ToString();
+                item.dogName.text = data.Attributes.Name;
+            }
+        }
+    }
+}

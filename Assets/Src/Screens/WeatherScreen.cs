@@ -29,7 +29,7 @@ namespace TestTask.Screens
                 .Subscribe(data =>
                 {
                     int temperature = data.Properties.Periods.First().Temperature;
-                    temperatureLabel.text = $"{temperature}F";
+                    temperatureLabel.text = $"Сегодня {temperature}F";
                 })
                 .AddTo(disposables);
                 
