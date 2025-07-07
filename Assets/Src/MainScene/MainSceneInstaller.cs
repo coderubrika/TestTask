@@ -1,5 +1,6 @@
 using Suburb.Screens;
 using Suburb.Utils;
+using TestTask.Clicker;
 using TestTask.Navigation;
 using TestTask.Transition;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace TestTask.MainScence
         public override void InstallBindings()
         {
             Container.Bind<InjectCreator>().AsSingle();
+            Container.Bind<ClickerService>().AsSingle();
             
             Container.Bind<ScreensFactory>()
                 .AsSingle()
