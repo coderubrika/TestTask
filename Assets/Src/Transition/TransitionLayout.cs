@@ -12,6 +12,8 @@ namespace TestTask.Transition
         [SerializeField] private Ease ease;
         [SerializeField] private float duration;
 
+        private Tween tween;
+        
         public void SetFadeIn()
         {
             canvasGroup.alpha = 1;
@@ -26,8 +28,11 @@ namespace TestTask.Transition
         
         public IObservable<Unit> PlayFadeIn()
         {
-            return canvasGroup.DOFade(1, duration)
-                .SetEase(ease)
+            DOTween.Kill(tween);
+            
+            tween = canvasGroup.DOFade(1, duration).SetEase(ease);
+            
+            return tween
                 .ToObservableOnKill()
                 .ObserveOnMainThread()
                 .Do(_ => SetFadeIn());
@@ -35,8 +40,9 @@ namespace TestTask.Transition
         
         public IObservable<Unit> PlayFadeOut()
         {
-            return canvasGroup.DOFade(0, duration)
-                .SetEase(ease)
+            DOTween.Kill(tween);
+            tween = canvasGroup.DOFade(0, duration).SetEase(ease);
+            return tween
                 .ToObservableOnKill()
                 .ObserveOnMainThread()
                 .Do(_ => SetFadeOut());

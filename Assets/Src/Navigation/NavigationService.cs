@@ -5,6 +5,7 @@ using Suburb.Utils;
 using TestTask.Screens;
 using TestTask.Transition;
 using UniRx;
+using UnityEngine.UI;
 using Zenject;
 
 namespace TestTask.Navigation
@@ -18,8 +19,13 @@ namespace TestTask.Navigation
         private readonly TransitionService transitionService;
         
         private NavigationLayout navigationLayout;
-
+        private Button currentButton;
+        
         private readonly CompositeDisposable disposables = new();
+
+        public Button ClickerButton => navigationLayout.ClickerButton;
+        public Button WeatherButton => navigationLayout.WeatherButton;
+        public Button DogsButton => navigationLayout.DogsButton;
         
         public NavigationService(
             LayoutsRoot layoutsRoot,
@@ -41,6 +47,11 @@ namespace TestTask.Navigation
             SetupTransitions();
             SetupButtons();
         }
+
+        public void SetButton(Button button)
+        {
+            currentButton = button;
+        }
         
         public void Dispose()
         {
@@ -53,15 +64,25 @@ namespace TestTask.Navigation
 
             ActItem<FromTo> actItemFrom = new ActItem<FromTo>((points, next) =>
             {
+                navigationLayout.SetButton(null);
                 transitionService.FadeIn()
-                    .Subscribe(_ => next?.Invoke(points))
+                    .Subscribe(_ =>
+                    {
+                        navigationLayout.SetEnableButtons(false);
+                        next?.Invoke(points);
+                    })
                     .AddTo(disposables);
             });
             
             ActItem<FromTo> actItemTo = new ActItem<FromTo>((points, next) =>
             {
                 transitionService.FadeOut()
-                    .Subscribe(_ => next?.Invoke(points))
+                    .Subscribe(_ =>
+                    {
+                        next?.Invoke(points);
+                        navigationLayout.SetButton(currentButton);
+                        navigationLayout.SetEnableButtons(true);
+                    })
                     .AddTo(disposables);
             });
             
@@ -76,17 +97,29 @@ namespace TestTask.Navigation
         {
             navigationLayout.ClickerButton
                 .OnClickAsObservable()
-                .Subscribe(_ => screensService.GoTo<ClickerScreen>())
+                .Subscribe(_ =>
+                {
+                    currentButton = ClickerButton;
+                    screensService.GoTo<ClickerScreen>();
+                })
                 .AddTo(disposables);
             
             navigationLayout.WeatherButton
                 .OnClickAsObservable()
-                .Subscribe(_ => screensService.GoTo<WeatherScreen>())
+                .Subscribe(_ =>
+                {
+                    currentButton = WeatherButton;
+                    screensService.GoTo<WeatherScreen>();
+                })
                 .AddTo(disposables);
             
             navigationLayout.DogsButton
                 .OnClickAsObservable()
-                .Subscribe(_ => screensService.GoTo<DogsScreen>())
+                .Subscribe(_ =>
+                {
+                    currentButton = DogsButton;
+                    screensService.GoTo<DogsScreen>();
+                })
                 .AddTo(disposables);
         }
     }

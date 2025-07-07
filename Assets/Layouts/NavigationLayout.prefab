@@ -360,6 +360,7 @@ MonoBehaviour:
   clickerButton: {fileID: 6928358093629712099}
   weatherButton: {fileID: 2983772152488901817}
   dogsButton: {fileID: 3902004179829895585}
+  canvasGroup: {fileID: 727939679204172929}
 --- !u!1 &3742164244628209106
 GameObject:
   m_ObjectHideFlags: 0
@@ -893,6 +894,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5103924644455432869}
   - component: {fileID: 585683315019169191}
+  - component: {fileID: 727939679204172929}
   m_Layer: 5
   m_Name: Buttons
   m_TagString: Untagged
@@ -948,3 +950,15 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!225 &727939679204172929
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8992206807967016458}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
