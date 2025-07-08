@@ -104,6 +104,7 @@ namespace TestTask.Dogs
         
         public void Clear()
         {
+            dogSubject?.Dispose();
             dogDisposable?.Dispose();
             dogsDisposable?.Dispose();
             dogsSubject?.Dispose();
