@@ -86,11 +86,11 @@ namespace TestTask.Dogs
             return dogSubject;
         }
         
-        public void ShowFullInfo(string id)
+        public IObservable<Unit> ShowFullInfo(string id)
         {
             dogInfoLayout.SetFadeOut();
 
-            GetDog(id)
+            return GetDog(id)
                 .ObserveOnMainThread()
                 .SelectMany(data =>
                 {
@@ -98,8 +98,8 @@ namespace TestTask.Dogs
                     dogInfoLayout.gameObject.SetActive(true);
                     return dogInfoLayout.LayoutGroup.Rebuild().ToObservable();
                 })
-                .Subscribe(_ => dogInfoLayout.FadeIn())
-                .AddTo(disposables);
+                .ObserveOnMainThread()
+                .Do(_ => dogInfoLayout.FadeIn());
         }
         
         public void Clear()

@@ -56,8 +56,11 @@ namespace TestTask.Screens
                     .OnClickAsObservable()
                     .Subscribe(_ =>
                     {
+                        dogListItem.Loading.SetActive(true);
                         dogsService.Clear();
-                        dogsService.ShowFullInfo(dataItem.Id);
+                        dogsService.ShowFullInfo(dataItem.Id)
+                            .Subscribe(_ => dogListItem.Loading.SetActive(false))
+                            .AddTo(disposables);
                     })
                     .AddTo(disposables);
             }
