@@ -21,10 +21,13 @@ namespace TestTask.MainScence
         [SerializeField] private DogListItem dogListItemPrefab;
         [SerializeField] private DogInfoLayout dogInfoLayoutPrefab;
         [SerializeField] private ParticleSystem particleSystemPrefab;
+        [SerializeField] private AudioSource audioSourcePrefab;
+        [SerializeField] private AudioClip clickClip;
         [SerializeField] private Camera fxCameraPrefab;
         
         private static string DOG_LIST_ITEM_GROUP = "DOG_LIST_ITEM_GROUP";
         private static string PARTICLE_SYSTEM_GROUP = "PARTICLE_SYSTEM_GROUP";
+        private static string AUDIO_SOURCE_GROUP = "AUDIO_SOURCE_GROUP";
         
         public override void InstallBindings()
         {
@@ -63,7 +66,7 @@ namespace TestTask.MainScence
             
             Container.BindInterfacesAndSelfTo<FXService>()
                 .AsSingle()
-                .WithArguments(fxCameraPrefab)
+                .WithArguments(fxCameraPrefab, clickClip)
                 .NonLazy();
             
             Container.BindInterfacesAndSelfTo<MainSceneStartup>()
@@ -81,6 +84,12 @@ namespace TestTask.MainScence
                 .WithMaxSize(5)
                 .FromComponentInNewPrefab(particleSystemPrefab)
                 .UnderTransformGroup(PARTICLE_SYSTEM_GROUP);
+            
+            Container.BindMemoryPool<AudioSource, AudioSourcePool>()
+                .WithInitialSize(0)
+                .WithMaxSize(5)
+                .FromComponentInNewPrefab(audioSourcePrefab)
+                .UnderTransformGroup(AUDIO_SOURCE_GROUP);
         }
     }
 }

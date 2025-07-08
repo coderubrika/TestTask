@@ -39,7 +39,7 @@ namespace TestTask.Screens
             tapButton.OnPointerClickAsObservable()
                 .Subscribe(data =>
                 {
-                    Vector3 position = TransformCoords(fxRectTransform, fxService.Camera, data.position);
+                    Vector3 position = UIUtils.TransformCoords(fxRectTransform, fxService.Camera, data.position);
                     clickerService.Click(position);
                 })
                 .AddTo(disposables);
@@ -52,18 +52,11 @@ namespace TestTask.Screens
                 .Subscribe(position =>
                 {
                     fxService.EmitParticle(position);
+                    fxService.PlayAudio();
                 })
                 .AddTo(disposables);
             
             base.Show();
-        }
-
-        public static Vector3 TransformCoords(RectTransform rectTransform, Camera camera, Vector2 screenPoint)
-        {
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, screenPoint, null, out Vector2 localPoint);
-            Vector2 pivot = rectTransform.pivot;
-            Vector2 size = new Vector2(rectTransform.rect.width, rectTransform.rect.height);
-            return camera.ViewportToWorldPoint(new Vector3(localPoint.x / size.x + pivot.x, localPoint.y / size.y + pivot.y));
         }
         
         private void UpdateValues()

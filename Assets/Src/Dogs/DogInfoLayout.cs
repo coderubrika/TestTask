@@ -42,7 +42,8 @@ namespace TestTask.Dogs
         {
             tween?.Kill();
             tween = null;
-            canvasGroup.alpha = 0;
+            if (canvasGroup != null)
+                canvasGroup.alpha = 0;
             OnCloseFinished.Execute();
         }
         

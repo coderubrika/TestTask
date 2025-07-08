@@ -130,7 +130,11 @@ namespace TestTask.Dogs
                 .AddTo(disposables);
 
             dogInfoLayout.OnCloseFinished
-                .Subscribe(_ => dogInfoLayout.gameObject.SetActive(false))
+                .Subscribe(_ =>
+                {
+                    if (dogInfoLayout != null)
+                        dogInfoLayout.gameObject.SetActive(false);
+                })
                 .AddTo(disposables);
         }
     }

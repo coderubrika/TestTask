@@ -71,5 +71,13 @@ namespace Suburb.Utils
             LayoutRebuilder.ForceRebuildLayoutImmediate(layoutGroup.transform as RectTransform);
             layoutGroup.enabled = true;
         }
+        
+        public static Vector3 TransformCoords(RectTransform rectTransform, Camera camera, Vector2 screenPoint)
+        {
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, screenPoint, null, out Vector2 localPoint);
+            Vector2 pivot = rectTransform.pivot;
+            Vector2 size = new Vector2(rectTransform.rect.width, rectTransform.rect.height);
+            return camera.ViewportToWorldPoint(new Vector3(localPoint.x / size.x + pivot.x, localPoint.y / size.y + pivot.y));
+        }
     }
 }

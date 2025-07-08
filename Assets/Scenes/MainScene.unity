@@ -206,6 +206,8 @@ MonoBehaviour:
   dogListItemPrefab: {fileID: 6672069703612459134, guid: dfac94e39e0a245c3b215c0c640180cc, type: 3}
   dogInfoLayoutPrefab: {fileID: 6339989025224730116, guid: 23d601821ff374aaa8c86ac062c4e929, type: 3}
   particleSystemPrefab: {fileID: 1708129729836934379, guid: 0ae20940c69194883ae5957a139f7dfd, type: 3}
+  audioSourcePrefab: {fileID: 4888623723981651714, guid: deede6fcb488440d18b31ba0b6b1915b, type: 3}
+  clickClip: {fileID: 8300000, guid: d2fa3e2b79dde43fe9135ee46830a5a4, type: 3}
   fxCameraPrefab: {fileID: 6277002449128480145, guid: d6bbacc7307a24b2e915ca3ea2f8beeb, type: 3}
 --- !u!1 &35449023
 GameObject:
@@ -334,7 +336,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 10
   field of view: 60
   orthographic: 1
   orthographic size: 5
