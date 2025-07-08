@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using Suburb.Utils.Serialization;
@@ -59,6 +60,16 @@ namespace Suburb.Utils
         public static float GetDurationForPercentage1(float current, float duration)
         {
             return (1 - current) * duration;
+        }
+        
+        public static IEnumerator Rebuild(this LayoutGroup layoutGroup)
+        {
+            yield return new WaitForEndOfFrame();
+            layoutGroup.enabled = false;
+            layoutGroup.CalculateLayoutInputHorizontal();
+            layoutGroup.CalculateLayoutInputVertical();
+            LayoutRebuilder.ForceRebuildLayoutImmediate(layoutGroup.transform as RectTransform);
+            layoutGroup.enabled = true;
         }
     }
 }

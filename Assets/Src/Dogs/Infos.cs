@@ -2,10 +2,16 @@ using Newtonsoft.Json;
 
 namespace TestTask.Dogs
 {
-    public class DogBreedResponse
+    public class DogBreedsResponse
     {
         [JsonProperty("data")]
         public BreedData[] Data { get; set; }
+    }
+    
+    public class DogBreedResponse
+    {
+        [JsonProperty("data")]
+        public BreedData Data { get; set; }
     }
 
     public class BreedData

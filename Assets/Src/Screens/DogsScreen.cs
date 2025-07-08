@@ -32,7 +32,10 @@ namespace TestTask.Screens
 
         protected override void Show()
         {
-            loading.SetActive(true);
+            dogsService.IsLoading
+                .Subscribe(isOn => loading.SetActive(isOn))
+                .AddTo(disposables);
+            
             dogsService.GetDogs()
                 .Subscribe(FillDogs)
                 .AddTo(disposables);
@@ -51,11 +54,13 @@ namespace TestTask.Screens
 
                 dogListItem.OpenDogInfoButton
                     .OnClickAsObservable()
-                    .Subscribe(_ => this.Log($"open item with id: {dataItem.Id}"))
+                    .Subscribe(_ =>
+                    {
+                        dogsService.Clear();
+                        dogsService.ShowFullInfo(dataItem.Id);
+                    })
                     .AddTo(disposables);
             }
-            
-            loading.SetActive(false);
         }
         
         protected override void Hide()
@@ -67,7 +72,7 @@ namespace TestTask.Screens
             
             items.Clear();
             
-            dogsService.Dispose();
+            dogsService.Clear();
             disposables.Clear();
         }
     }

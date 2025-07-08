@@ -18,6 +18,7 @@ namespace TestTask.MainScence
         [SerializeField] private NavigationLayout navigationLayoutPrefab;
         [SerializeField] private TransitionLayout transitionLayoutPrefab;
         [SerializeField] private DogListItem dogListItemPrefab;
+        [SerializeField] private DogInfoLayout dogInfoLayoutPrefab;
 
         private static string DOG_LIST_ITEM_GROUP = "DOG_LIST_ITEM_GROUP";
         
@@ -27,7 +28,6 @@ namespace TestTask.MainScence
             Container.Bind<ClickerService>().AsSingle();
             Container.Bind<RestClientService>().AsSingle();
             Container.Bind<WeatherService>().AsSingle();
-            Container.Bind<DogsService>().AsSingle();
             
             Container.Bind<ScreensFactory>()
                 .AsSingle()
@@ -50,6 +50,11 @@ namespace TestTask.MainScence
             Container.BindInterfacesAndSelfTo<NavigationService>()
                 .AsSingle()
                 .WithArguments(navigationLayoutPrefab)
+                .NonLazy();
+            
+            Container.BindInterfacesAndSelfTo<DogsService>()
+                .AsSingle()
+                .WithArguments(dogInfoLayoutPrefab)
                 .NonLazy();
             
             Container.BindInterfacesAndSelfTo<MainSceneStartup>()
