@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Suburb.Screens;
 using Suburb.Utils;
 using TestTask.Dogs;
@@ -29,9 +30,18 @@ namespace TestTask.Screens
             this.dogsService = dogsService;
             this.pool = pool;
         }
-
+        
         protected override void Show()
         {
+            dogsService.OnCancel
+                .ObserveOnMainThread()
+                .Subscribe(id =>
+                {
+                    var itemView = items.FirstOrDefault(item => item.Id == id);
+                    itemView?.Loading.SetActive(false);
+                })
+                .AddTo(disposables);
+            
             dogsService.IsLoading
                 .Subscribe(isOn => loading.SetActive(isOn))
                 .AddTo(disposables);

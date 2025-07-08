@@ -20,12 +20,13 @@ namespace TestTask.Dogs
         private IDisposable dogsDisposable;
         private IDisposable dogDisposable;
         private Subject<DogBreedResponse> dogSubject;
-        
+        private string lastId;
         private readonly CompositeDisposable disposables = new();
         
         private readonly string address = "https://dogapi.dog/api/v2/breeds/";
 
         public ReactiveProperty<bool> IsLoading { get; } = new();
+        public ReactiveCommand<string> OnCancel { get; } = new();
         
         public DogsService(
             RestClientService restClientService,
@@ -70,7 +71,6 @@ namespace TestTask.Dogs
 
         private IObservable<DogBreedResponse> GetDog(string id)
         {
-            IsLoading.Value = true;
             dogSubject?.Dispose();
             dogSubject = new();
             dogDisposable?.Dispose();
@@ -78,8 +78,8 @@ namespace TestTask.Dogs
                 address + id,
                 data =>
                 {
-                    IsLoading.Value = false;
                     dogSubject.OnNext(data);
+                    lastId = null;
                 }, 
                 dogSubject.OnError);
             
@@ -90,6 +90,11 @@ namespace TestTask.Dogs
         {
             dogInfoLayout.SetFadeOut();
 
+            if (!lastId.IsNullOrEmpty() && id != lastId)
+                OnCancel.Execute(lastId);
+            
+            lastId = id;
+            
             return GetDog(id)
                 .ObserveOnMainThread()
                 .SelectMany(data =>
@@ -111,6 +116,10 @@ namespace TestTask.Dogs
             dogsSubject = null;
             dogInfoLayout.SetFadeOut();
             IsLoading.Value = false;
+            
+            if (!lastId.IsNullOrEmpty())
+                OnCancel.Execute(lastId);
+            lastId = null;
         }
 
         public void Dispose()

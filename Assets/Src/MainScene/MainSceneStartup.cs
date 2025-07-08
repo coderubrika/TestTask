@@ -2,6 +2,7 @@ using Suburb.Screens;
 using TestTask.Navigation;
 using TestTask.Screens;
 using TestTask.Transition;
+using UnityEngine;
 using Zenject;
 
 namespace TestTask.MainScence
@@ -27,6 +28,7 @@ namespace TestTask.MainScence
             transitionService.SetFadeIn();
             screensService.GoTo<ClickerScreen>();
             navigationService.SetButton(navigationService.ClickerButton);
+            Application.targetFrameRate = 90;
         }
     }
 }
