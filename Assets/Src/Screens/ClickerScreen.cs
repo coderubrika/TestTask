@@ -2,6 +2,7 @@ using Suburb.Screens;
 using Suburb.Utils;
 using TestTask.Clicker;
 using TestTask.FX;
+using TestTask.UI;
 using TMPro;
 using UniRx;
 using UniRx.Triggers;
@@ -23,6 +24,8 @@ namespace TestTask.Screens
         
         private readonly CompositeDisposable disposables = new();
 
+        private RectTransformAnim buttonAnimation;
+        
         [Inject]
         private void Construct(
             ClickerService clickerService,
@@ -31,6 +34,12 @@ namespace TestTask.Screens
             this.fxService = fxService;
             this.clickerService = clickerService;
             clickerService.Enable();
+            buttonAnimation = new(
+                tapButton.transform as RectTransform,
+                Vector3.zero,
+                Quaternion.identity,
+                Vector3.one,
+                10f, 10f);
         }
         
         protected override void Show()
@@ -53,6 +62,7 @@ namespace TestTask.Screens
                 {
                     fxService.EmitParticle(position);
                     fxService.PlayAudio();
+                    buttonAnimation.PlayAnimation();
                 })
                 .AddTo(disposables);
             
@@ -67,6 +77,7 @@ namespace TestTask.Screens
         
         protected override void Hide()
         {
+            buttonAnimation.Clear();
             fxService.Disable();
             base.Hide();
             disposables.Clear();
