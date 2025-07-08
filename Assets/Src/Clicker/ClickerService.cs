@@ -12,15 +12,21 @@ namespace TestTask.Clicker
         public int MaxEnergy { get; private set; }
         public int Money { get; private set; }
         public int Transit { get; private set; }
+        public int EnergyUpInterval { get; private set; }
+        public int EnergyUpTransit { get; private set; }
+        public int AutoClickInterval { get; private set; }
 
         public ReactiveCommand<Vector3> OnClick { get; } = new();
         
-        public ClickerService()
+        public ClickerService(SettingsRepository settingsRepository)
         {
-            MaxEnergy = 1000;
-            Energy = Mathf.Clamp(1000, 0, MaxEnergy);
+            MaxEnergy = settingsRepository.StartMaxEnergy;
+            Energy = Mathf.Clamp(settingsRepository.StartEnergy, 0, MaxEnergy);
             Money = 0;
-            Transit = 1;
+            Transit = settingsRepository.StartTransit;
+            EnergyUpTransit = settingsRepository.StartEnergyUpTransit;
+            EnergyUpInterval = settingsRepository.StartEnergyUpInterval;
+            AutoClickInterval = settingsRepository.StartAutoClickInterval;
         }
         
         public void Click(Vector3 position)
@@ -36,12 +42,12 @@ namespace TestTask.Clicker
 
         public void Enable()
         {
-            Observable.Interval(TimeSpan.FromSeconds(3))
+            Observable.Interval(TimeSpan.FromSeconds(AutoClickInterval))
                 .Subscribe(_ => Click(Vector3.zero))
                 .AddTo(disposables);
             
-            Observable.Interval(TimeSpan.FromSeconds(10))
-                .Subscribe(_ => Energy = Mathf.Clamp(Energy + 10, 0, MaxEnergy))
+            Observable.Interval(TimeSpan.FromSeconds(EnergyUpInterval))
+                .Subscribe(_ => Energy = Mathf.Clamp(Energy + EnergyUpTransit, 0, MaxEnergy))
                 .AddTo(disposables);
         }
 
