@@ -12,7 +12,7 @@ namespace TestTask.Clicker
         public int MaxEnergy { get; private set; }
         public int Money { get; private set; }
 
-        public ReactiveCommand OnClick { get; } = new();
+        public ReactiveCommand<Vector3> OnClick { get; } = new();
         
         public ClickerService()
         {
@@ -21,7 +21,7 @@ namespace TestTask.Clicker
             Money = 0;
         }
         
-        public void Click()
+        public void Click(Vector3 position)
         {
             if (Energy == 0)
                 return;
@@ -29,13 +29,13 @@ namespace TestTask.Clicker
             Money += 1;
             Energy -= 1;
 
-            OnClick.Execute();
+            OnClick.Execute(position);
         }
 
         public void Enable()
         {
             Observable.Interval(TimeSpan.FromSeconds(3))
-                .Subscribe(_ => Click())
+                .Subscribe(_ => Click(Vector3.zero))
                 .AddTo(disposables);
             
             Observable.Interval(TimeSpan.FromSeconds(10))

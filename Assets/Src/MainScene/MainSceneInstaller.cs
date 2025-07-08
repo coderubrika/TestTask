@@ -2,6 +2,7 @@ using Suburb.Screens;
 using Suburb.Utils;
 using TestTask.Clicker;
 using TestTask.Dogs;
+using TestTask.FX;
 using TestTask.Navigation;
 using TestTask.RestClientQueue;
 using TestTask.Transition;
@@ -19,8 +20,11 @@ namespace TestTask.MainScence
         [SerializeField] private TransitionLayout transitionLayoutPrefab;
         [SerializeField] private DogListItem dogListItemPrefab;
         [SerializeField] private DogInfoLayout dogInfoLayoutPrefab;
-
+        [SerializeField] private ParticleSystem particleSystemPrefab;
+        [SerializeField] private Camera fxCameraPrefab;
+        
         private static string DOG_LIST_ITEM_GROUP = "DOG_LIST_ITEM_GROUP";
+        private static string PARTICLE_SYSTEM_GROUP = "PARTICLE_SYSTEM_GROUP";
         
         public override void InstallBindings()
         {
@@ -57,6 +61,11 @@ namespace TestTask.MainScence
                 .WithArguments(dogInfoLayoutPrefab)
                 .NonLazy();
             
+            Container.BindInterfacesAndSelfTo<FXService>()
+                .AsSingle()
+                .WithArguments(fxCameraPrefab)
+                .NonLazy();
+            
             Container.BindInterfacesAndSelfTo<MainSceneStartup>()
                 .AsSingle()
                 .NonLazy();
@@ -66,6 +75,12 @@ namespace TestTask.MainScence
                 .WithMaxSize(10)
                 .FromComponentInNewPrefab(dogListItemPrefab)
                 .UnderTransformGroup(DOG_LIST_ITEM_GROUP);
+
+            Container.BindMemoryPool<ParticleSystem, ParticlePool>()
+                .WithInitialSize(0)
+                .WithMaxSize(5)
+                .FromComponentInNewPrefab(particleSystemPrefab)
+                .UnderTransformGroup(PARTICLE_SYSTEM_GROUP);
         }
     }
 }
