@@ -1,5 +1,7 @@
 using System;
 using Suburb.Utils;
+using TestTask.UI;
+using TMPro;
 using UniRx;
 using UnityEngine;
 using Zenject;
@@ -14,10 +16,12 @@ namespace TestTask.FX
         private readonly InjectCreator injectCreator;
         private readonly AudioClip clickClip;
         private readonly AudioSourcePool audioSourcePool;
+        private readonly TMPTextPool tmpTextPool;
         
         private readonly CompositeDisposable disposables = new();
         private readonly Store<ParticleSystem> particles = new();
         private readonly Store<AudioSource> audioSources = new();
+        private readonly Store<WaveUpAnim> textAnims = new();
         
         private bool isEnable;
         
@@ -28,13 +32,15 @@ namespace TestTask.FX
             ParticlePool particlePool,
             InjectCreator injectCreator,
             AudioSourcePool audioSourcePool,
-            AudioClip clickClip)
+            AudioClip clickClip,
+            TMPTextPool tmpTextPool)
         {
             this.audioSourcePool = audioSourcePool;
             this.clickClip = clickClip;
             this.particlePool = particlePool;
             this.cameraPrefab = cameraPrefab;
             this.injectCreator = injectCreator;
+            this.tmpTextPool = tmpTextPool;
         }
 
         public void Initialize()
@@ -66,6 +72,26 @@ namespace TestTask.FX
             audioSource.Play();
             audioSources.Push(audioSource);
         }
+
+        public void EmitText(string text, RectTransform root, Vector2 screenPosition)
+        {
+            if (!isEnable)
+                return;
+            
+            var tmpText = tmpTextPool.Spawn();
+            tmpText.transform.SetParent(root);
+            tmpText.text = text;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                root, screenPosition, null, out Vector2 localPoint);
+
+            tmpText.rectTransform.localScale = Vector3.one;
+            tmpText.rectTransform.rotation = Quaternion.identity;
+            tmpText.rectTransform.anchoredPosition = localPoint;
+            
+            var anim = new WaveUpAnim(tmpText, localPoint, 1f, 300f, 25f);
+            anim.Play();
+            textAnims.Push(anim);
+        }
         
         public void Enable()
         {
@@ -96,6 +122,16 @@ namespace TestTask.FX
                         audioSourcePool.Despawn(audioSource);
                         audioSources.Remove(audioSource);
                     }
+                    
+                    foreach (var textAnim in textAnims)
+                    {
+                        if (textAnim.IsPlaying) 
+                            continue;
+                        
+                        textAnim.Clear();
+                        tmpTextPool.Despawn(textAnim.TMPText);
+                        textAnims.Remove(textAnim);
+                    }
                 })
                 .AddTo(disposables);
         }
@@ -118,6 +154,14 @@ namespace TestTask.FX
             }
             
             particles.Clear();
+            
+            foreach (var textAnim in textAnims)
+            {
+                textAnim.Clear();
+                tmpTextPool.Despawn(textAnim.TMPText);
+            }
+            
+            textAnims.Clear();
         }
 
         public void Dispose()

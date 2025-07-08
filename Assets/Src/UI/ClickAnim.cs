@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace TestTask.UI
 {
-    public class RectTransformAnim
+    public class ClickAnim
     {
         private readonly RectTransform rectTransform;
         private readonly Vector3 originalPosition;
@@ -12,7 +12,7 @@ namespace TestTask.UI
         private readonly float jumpHeight;
         private readonly float rotationAngle;
 
-        public RectTransformAnim(
+        public ClickAnim(
             RectTransform rectTransform,
             Vector3 originalPosition,
             Quaternion originalRotation,

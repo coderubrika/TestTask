@@ -11,6 +11,7 @@ namespace TestTask.Clicker
         public int Energy { get; private set; }
         public int MaxEnergy { get; private set; }
         public int Money { get; private set; }
+        public int Transit { get; private set; }
 
         public ReactiveCommand<Vector3> OnClick { get; } = new();
         
@@ -19,6 +20,7 @@ namespace TestTask.Clicker
             MaxEnergy = 1000;
             Energy = Mathf.Clamp(1000, 0, MaxEnergy);
             Money = 0;
+            Transit = 1;
         }
         
         public void Click(Vector3 position)
@@ -26,8 +28,8 @@ namespace TestTask.Clicker
             if (Energy == 0)
                 return;
             
-            Money += 1;
-            Energy -= 1;
+            Money += Transit;
+            Energy -= Transit;
 
             OnClick.Execute(position);
         }

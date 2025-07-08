@@ -209,6 +209,7 @@ MonoBehaviour:
   audioSourcePrefab: {fileID: 4888623723981651714, guid: deede6fcb488440d18b31ba0b6b1915b, type: 3}
   clickClip: {fileID: 8300000, guid: d2fa3e2b79dde43fe9135ee46830a5a4, type: 3}
   fxCameraPrefab: {fileID: 6277002449128480145, guid: d6bbacc7307a24b2e915ca3ea2f8beeb, type: 3}
+  tmpTextPrefab: {fileID: 1868295873301148388, guid: 14724cf2c916a4589b292b2886c17c7a, type: 3}
 --- !u!1 &35449023
 GameObject:
   m_ObjectHideFlags: 0

@@ -20,11 +20,13 @@ namespace TestTask.Screens
         [SerializeField] private TMP_Text money;
         [SerializeField] private TMP_Text energy;
         [SerializeField] private Button tapButton;
+        [SerializeField] private RectTransform buttonHolder;
         [SerializeField] private RectTransform fxRectTransform;
         
         private readonly CompositeDisposable disposables = new();
 
-        private RectTransformAnim buttonAnimation;
+        private ClickAnim buttonAnimation;
+        private Vector2 lastScreenPosition;
         
         [Inject]
         private void Construct(
@@ -48,6 +50,7 @@ namespace TestTask.Screens
             tapButton.OnPointerClickAsObservable()
                 .Subscribe(data =>
                 {
+                    lastScreenPosition = data.position;
                     Vector3 position = UIUtils.TransformCoords(fxRectTransform, fxService.Camera, data.position);
                     clickerService.Click(position);
                 })
@@ -63,6 +66,10 @@ namespace TestTask.Screens
                     fxService.EmitParticle(position);
                     fxService.PlayAudio();
                     buttonAnimation.PlayAnimation();
+                    fxService.EmitText($"+{clickerService.Transit}",
+                        buttonHolder,
+                        lastScreenPosition == Vector2.zero ? tapButton.transform.position : lastScreenPosition);
+                    lastScreenPosition = Vector2.zero;
                 })
                 .AddTo(disposables);
             
@@ -77,6 +84,7 @@ namespace TestTask.Screens
         
         protected override void Hide()
         {
+            lastScreenPosition = Vector2.zero;
             buttonAnimation.Clear();
             fxService.Disable();
             base.Hide();

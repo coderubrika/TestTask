@@ -8,6 +8,7 @@ using TestTask.RestClientQueue;
 using TestTask.Transition;
 using TestTask.UI;
 using TestTask.Weather;
+using TMPro;
 using UnityEngine;
 using Zenject;
 
@@ -24,10 +25,12 @@ namespace TestTask.MainScence
         [SerializeField] private AudioSource audioSourcePrefab;
         [SerializeField] private AudioClip clickClip;
         [SerializeField] private Camera fxCameraPrefab;
+        [SerializeField] private TMP_Text tmpTextPrefab;
         
         private static string DOG_LIST_ITEM_GROUP = "DOG_LIST_ITEM_GROUP";
         private static string PARTICLE_SYSTEM_GROUP = "PARTICLE_SYSTEM_GROUP";
         private static string AUDIO_SOURCE_GROUP = "AUDIO_SOURCE_GROUP";
+        private static string TMP_TEXT_GROUP = "TMP_TEXT_GROUP";
         
         public override void InstallBindings()
         {
@@ -90,6 +93,12 @@ namespace TestTask.MainScence
                 .WithMaxSize(5)
                 .FromComponentInNewPrefab(audioSourcePrefab)
                 .UnderTransformGroup(AUDIO_SOURCE_GROUP);
+            
+            Container.BindMemoryPool<TMP_Text, TMPTextPool>()
+                .WithInitialSize(0)
+                .WithMaxSize(5)
+                .FromComponentInNewPrefab(tmpTextPrefab)
+                .UnderTransformGroup(TMP_TEXT_GROUP);
         }
     }
 }
